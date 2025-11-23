@@ -55,17 +55,7 @@ export function TimeSeriesChart({
       };
     }
 
-    return {
-      title: title
-        ? {
-            text: title,
-            left: 'center',
-            textStyle: {
-              fontSize: 16,
-              fontWeight: 'normal',
-            },
-          }
-        : undefined,
+    const chartConfig: any = {
       tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -87,6 +77,7 @@ export function TimeSeriesChart({
       grid: {
         left: '3%',
         right: '4%',
+        top: '3%',
         bottom: '3%',
         containLabel: true,
       },
@@ -164,6 +155,20 @@ export function TimeSeriesChart({
         },
       ],
     };
+
+    // Only add title if provided
+    if (title) {
+      chartConfig.title = {
+        text: title,
+        left: 'center',
+        textStyle: {
+          fontSize: 16,
+          fontWeight: 'normal',
+        },
+      };
+    }
+
+    return chartConfig;
   }, [data, title, seriesName, color, showArea, smooth]);
 
   if (isLoading) {
@@ -181,7 +186,7 @@ export function TimeSeriesChart({
   }
 
   return (
-    <Box {...boxProps} minH={height}>
+    <Box {...boxProps} minH={height} h={typeof height === 'string' && height.endsWith('%') ? height : undefined}>
       <ReactECharts
         option={chartOption}
         style={{ height, width: '100%' }}
